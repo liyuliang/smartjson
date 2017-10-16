@@ -65,6 +65,7 @@ func Test_Unmarshal2(t *testing.T) {
 
 func Test_Unmarshal3(t *testing.T) {
 	json := Unmarshal([]byte(jsonStrDemo()))
+	json.GetArray()
 	jsons := json.GetJsons("hotCommentsNotExist")
 
 	if json.Err == nil {
@@ -88,6 +89,25 @@ func Test_Unmarshal3(t *testing.T) {
 		}
 	} else {
 		t.Error("parse json failed , please check ',' ")
+	}
+}
+
+func Test_Unmarshal4(t *testing.T) {
+
+	jsonStr := `["{\"CreateTime\":\"2017-10-17 00:08:10\",\"Data\":\"{\\\"age\\\":\\\"18\\\",\\\"money\\\":\\\"3933\\\",\\\"name\\\":\\\"keke\\\",\\\"site\\\":\\\"qqqqq\\\",\\\"type\\\":\\\"page\\\",\\\"url\\\":\\\"http://www.qqqqq.org/taotao/10946.html\\\"}\",\"DelayTime\":\"2017-10-17 00:08:11\",\"TTL\":\"2017-10-17 02:08:11\",\"id\":\"139952183956213760\"}","{\"CreateTime\":\"2017-10-17 00:08:08\",\"Data\":\"{\\\"age\\\":\\\"18\\\",\\\"money\\\":\\\"3933\\\",\\\"name\\\":\\\"keke\\\",\\\"site\\\":\\\"qqqqq\\\",\\\"type\\\":\\\"page\\\",\\\"url\\\":\\\"http://www.qqqqq.org/taotao/10946.html\\\"}\",\"DelayTime\":\"2017-10-17 00:08:09\",\"TTL\":\"2017-10-17 02:08:09\",\"id\":\"139952079153139712\"}"]`
+	json := Unmarshal([]byte(jsonStr))
+	for index, value := range json.GetArray() {
+
+		time := value.Get("CreateTime").MustString()
+
+		if index == 0 && "2017-10-17 00:08:10" != time {
+			t.Error("parse json wrong ,which should be ", "2017-10-17 00:08:10", ",but get: ", time)
+
+		}
+		if index == 1 && "2017-10-17 00:08:08" != time {
+			t.Error("parse json wrong ,which should be ", "2017-10-17 00:08:10", ",but get: ", time)
+
+		}
 	}
 }
 

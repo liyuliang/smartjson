@@ -1,7 +1,7 @@
 package smartjson
 
 import (
-	simplejson "github.com/bitly/go-simplejson"
+	"github.com/bitly/go-simplejson"
 )
 
 type Json struct {
@@ -23,8 +23,7 @@ func (j *Json) Get(key string) *simplejson.Json {
 	return j.object.Get(key)
 }
 
-func (j *Json) GetJsons(key string) []*simplejson.Json {
-	result := []*simplejson.Json{}
+func (j *Json) GetJsons(key string) (result []*simplejson.Json) {
 
 	jsons := j.Get(key)
 
@@ -54,4 +53,29 @@ func emptyJson() (*simplejson.Json) {
 
 func errorJson(err error) *simplejson.Json {
 	return toJson("message", err.Error())
+}
+
+func (j *Json) GetArray() (jsons []*simplejson.Json) {
+
+	nodes := j.object.MustArray()
+	nodesCount := len(nodes)
+
+	for i := 0; i < nodesCount; i++ {
+		node := j.object.GetIndex(i)
+
+		childNodeStr := node.MustString()
+
+		childJson, err := simplejson.NewJson([]byte(childNodeStr))
+		if err == nil {
+			jsons = append(jsons, childJson)
+
+		} else {
+			jsons = append(jsons, node)
+		}
+	}
+
+	if len(jsons) == 0 {
+		jsons = append(jsons, emptyJson())
+	}
+	return jsons
 }

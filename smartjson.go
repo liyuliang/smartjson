@@ -75,10 +75,6 @@ func (j *Json) GetArray() (jsons []*simplejson.Json) {
 			}
 		}
 	}
-
-	if len(jsons) == 0 {
-		jsons = append(jsons, emptyJson())
-	}
 	return jsons
 }
 

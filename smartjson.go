@@ -59,18 +59,20 @@ func (j *Json) GetArray() (jsons []*simplejson.Json) {
 
 	nodes := j.object.MustArray()
 	nodesCount := len(nodes)
+	if nodesCount != 0 {
 
-	for i := 0; i < nodesCount; i++ {
-		node := j.object.GetIndex(i)
+		for i := 0; i < nodesCount; i++ {
+			node := j.object.GetIndex(i)
 
-		childNodeStr := node.MustString()
+			childNodeStr := node.MustString()
 
-		childJson, err := simplejson.NewJson([]byte(childNodeStr))
-		if err == nil {
-			jsons = append(jsons, childJson)
+			childJson, err := simplejson.NewJson([]byte(childNodeStr))
+			if err == nil {
+				jsons = append(jsons, childJson)
 
-		} else {
-			jsons = append(jsons, node)
+			} else {
+				jsons = append(jsons, node)
+			}
 		}
 	}
 

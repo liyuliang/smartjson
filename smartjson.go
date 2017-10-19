@@ -79,3 +79,7 @@ func (j *Json) GetArray() (jsons []*simplejson.Json) {
 	}
 	return jsons
 }
+
+func (j *Json) GetMap() (data map[string]interface{}) {
+	return j.object.MustMap()
+}

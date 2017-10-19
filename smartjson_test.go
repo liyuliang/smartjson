@@ -111,6 +111,20 @@ func Test_Unmarshal4(t *testing.T) {
 	}
 }
 
+func Test_ToMap(t *testing.T) {
+	jsonStr := `["{\"CreateTime\":\"2017-10-17 00:08:10\",\"Data\":\"{\\\"age\\\":\\\"18\\\",\\\"money\\\":\\\"3933\\\",\\\"name\\\":\\\"keke\\\",\\\"site\\\":\\\"qqqqq\\\",\\\"type\\\":\\\"page\\\",\\\"url\\\":\\\"http://www.qqqqq.org/taotao/10946.html\\\"}\",\"DelayTime\":\"2017-10-17 00:08:11\",\"TTL\":\"2017-10-17 02:08:11\",\"id\":\"139952183956213760\"}","{\"CreateTime\":\"2017-10-17 00:08:08\",\"Data\":\"{\\\"age\\\":\\\"18\\\",\\\"money\\\":\\\"3933\\\",\\\"name\\\":\\\"keke\\\",\\\"site\\\":\\\"qqqqq\\\",\\\"type\\\":\\\"page\\\",\\\"url\\\":\\\"http://www.qqqqq.org/taotao/10946.html\\\"}\",\"DelayTime\":\"2017-10-17 00:08:09\",\"TTL\":\"2017-10-17 02:08:09\",\"id\":\"139952079153139712\"}"]`
+	json := Unmarshal([]byte(jsonStr))
+	for _, value := range json.GetArray() {
+
+		data := value.Get("Data").MustString()
+
+		for k, v := range Unmarshal([]byte(data)).GetMap() {
+			println(k,"-",v.(string))
+		}
+		//println(value.Get("Data").MustString())
+	}
+}
+
 func jsonStrDemo() string {
 	return `{
   "moreHot": true,

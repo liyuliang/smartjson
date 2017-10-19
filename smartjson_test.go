@@ -118,10 +118,10 @@ func Test_ToMap(t *testing.T) {
 
 		data := value.Get("Data").MustString()
 
-		for k, v := range Unmarshal([]byte(data)).GetMap() {
-			println(k,"-",v.(string))
+		mapData := Unmarshal([]byte(data)).GetMap()
+		if len(mapData) == 0{
+			t.Error("json to map failed")
 		}
-		//println(value.Get("Data").MustString())
 	}
 }
 

@@ -1,8 +1,6 @@
 package smartjson
 
-import (
-	"github.com/bitly/go-simplejson"
-)
+import "smartjson/simplejson"
 
 type Json struct {
 	object *simplejson.Json

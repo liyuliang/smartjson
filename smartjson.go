@@ -1,19 +1,17 @@
 package smartjson
 
-import "smartjson/simplejson"
-
 type Json struct {
-	object *simplejson.Json
+	object *simpleJson
 	Err    error
 }
 
 func Unmarshal(data []byte) (*Json) {
 	j := new(Json)
-	j.object, j.Err = simplejson.NewJson(data)
+	j.object, j.Err = newJson(data)
 	return j
 }
 
-func (j *Json) Get(key string) *simplejson.Json {
+func (j *Json) Get(key string) *simpleJson {
 	if j.Err != nil {
 		return emptyJson()
 	}
@@ -21,7 +19,7 @@ func (j *Json) Get(key string) *simplejson.Json {
 	return j.object.Get(key)
 }
 
-func (j *Json) GetJsons(key string) (result []*simplejson.Json) {
+func (j *Json) GetJsons(key string) (result []*simpleJson) {
 
 	jsons := j.Get(key)
 
@@ -38,22 +36,22 @@ func (j *Json) GetJsons(key string) (result []*simplejson.Json) {
 	return result
 }
 
-func toJson(key string, value interface{}) (*simplejson.Json) {
+func toJson(key string, value interface{}) (*simpleJson) {
 	j := emptyJson()
 	j.Set(key, value)
 	return j
 }
 
-func emptyJson() (*simplejson.Json) {
-	j, _ := simplejson.NewJson([]byte(`{}`))
+func emptyJson() (*simpleJson) {
+	j, _ := newJson([]byte(`{}`))
 	return j
 }
 
-func errorJson(err error) *simplejson.Json {
+func errorJson(err error) *simpleJson {
 	return toJson("message", err.Error())
 }
 
-func (j *Json) GetArray() (jsons []*simplejson.Json) {
+func (j *Json) GetArray() (jsons []*simpleJson) {
 
 	nodes := j.object.MustArray()
 	nodesCount := len(nodes)
@@ -64,7 +62,7 @@ func (j *Json) GetArray() (jsons []*simplejson.Json) {
 
 			childNodeStr := node.MustString()
 
-			childJson, err := simplejson.NewJson([]byte(childNodeStr))
+			childJson, err := newJson([]byte(childNodeStr))
 			if err == nil {
 				jsons = append(jsons, childJson)
 

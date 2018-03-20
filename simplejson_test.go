@@ -1,4 +1,4 @@
-package simplejson
+package smartjson
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ func TestSimplejson(t *testing.T) {
 	var ok bool
 	var err error
 
-	js, err := NewJson([]byte(`{
+	js, err := newJson([]byte(`{
 		"test": {
 			"string_array": ["asdf", "ghjk", "zxcv"],
 			"string_array_null": ["abc", null, "efg"],
@@ -126,12 +126,12 @@ func TestSimplejson(t *testing.T) {
 
 func TestStdlibInterfaces(t *testing.T) {
 	val := new(struct {
-		Name   string `json:"name"`
-		Params *Json  `json:"params"`
+		Name   string      `json:"name"`
+		Params *simpleJson `json:"params"`
 	})
 	val2 := new(struct {
-		Name   string `json:"name"`
-		Params *Json  `json:"params"`
+		Name   string      `json:"name"`
+		Params *simpleJson `json:"params"`
 	})
 
 	raw := `{"name":"myobject","params":{"string":"simplejson"}}`
@@ -150,7 +150,7 @@ func TestStdlibInterfaces(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	js, err := NewJson([]byte(`{}`))
+	js, err := newJson([]byte(`{}`))
 	assert.Equal(t, nil, err)
 
 	js.Set("baz", "bing")
@@ -161,7 +161,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestReplace(t *testing.T) {
-	js, err := NewJson([]byte(`{}`))
+	js, err := newJson([]byte(`{}`))
 	assert.Equal(t, nil, err)
 
 	err = js.UnmarshalJSON([]byte(`{"baz":"bing"}`))
@@ -173,7 +173,7 @@ func TestReplace(t *testing.T) {
 }
 
 func TestSetPath(t *testing.T) {
-	js, err := NewJson([]byte(`{}`))
+	js, err := newJson([]byte(`{}`))
 	assert.Equal(t, nil, err)
 
 	js.SetPath([]string{"foo", "bar"}, "baz")
@@ -184,7 +184,7 @@ func TestSetPath(t *testing.T) {
 }
 
 func TestSetPathNoPath(t *testing.T) {
-	js, err := NewJson([]byte(`{"some":"data","some_number":1.0,"some_bool":false}`))
+	js, err := newJson([]byte(`{"some":"data","some_number":1.0,"some_bool":false}`))
 	assert.Equal(t, nil, err)
 
 	f := js.GetPath("some_number").MustFloat64(99.0)
@@ -201,7 +201,7 @@ func TestSetPathNoPath(t *testing.T) {
 }
 
 func TestPathWillAugmentExisting(t *testing.T) {
-	js, err := NewJson([]byte(`{"this":{"a":"aa","b":"bb","c":"cc"}}`))
+	js, err := newJson([]byte(`{"this":{"a":"aa","b":"bb","c":"cc"}}`))
 	assert.Equal(t, nil, err)
 
 	js.SetPath([]string{"this", "d"}, "dd")
@@ -237,7 +237,7 @@ func TestPathWillAugmentExisting(t *testing.T) {
 
 func TestPathWillOverwriteExisting(t *testing.T) {
 	// notice how "a" is 0.1 - but then we'll try to set at path a, foo
-	js, err := NewJson([]byte(`{"this":{"a":0.1,"b":"bb","c":"cc"}}`))
+	js, err := newJson([]byte(`{"this":{"a":0.1,"b":"bb","c":"cc"}}`))
 	assert.Equal(t, nil, err)
 
 	js.SetPath([]string{"this", "a", "foo"}, "bar")

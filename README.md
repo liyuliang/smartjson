@@ -3,5 +3,5 @@ It depends the package https://github.com/bitly/go-simplejson
 
 ### Install
 ```text
-$ glide up
+$ glide get gitee.com/liyuliang/smartjson
 ```
